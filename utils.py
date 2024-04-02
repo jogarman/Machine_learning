@@ -11,6 +11,8 @@ import feature_engine.imputation as fe_imp
 import sklearn.impute as skl_imp
 from sklearn.experimental import enable_iterative_imputer
 
+from pycaret.classification import *
+
 ##########################################################################################################
 ##########################################################################################################
 """ Técnicas de imputar missings """
@@ -30,10 +32,10 @@ imputer_itImp = skl_imp.IterativeImputer(max_iter=10, random_state=0)
 
 # Feature_engine: https://feature-engine.trainindata.com/en/latest/user_guide/imputation/index.html
 # Aleatoria: numéricas y nominales
-imputer_aleatorio = fe_imp.RandomSampleImputer() #-> 'The beauty of the random sampler is that it preserves the original variable distribution'
+imputer_aleatorio = fe_imp.RandomSampleImputer() #-> 'it preserves the original variable distribution'
 # Mediana: solo numéricas
 imputer_mediana = fe_imp.MeanMedianImputer(imputation_method='median')
-# Media: solo nominales
+# Media: solo nominales || mentira! solo numericas
 imputer_media = fe_imp.MeanMedianImputer(imputation_method='mean')
 #ejemplo: imput_wins_knn_imputed = pd.DataFrame(imputer_knn.fit_transform(imput_wins_cont),columns=imput_wins_cont.columns)
 
@@ -42,16 +44,30 @@ imputer_media = fe_imp.MeanMedianImputer(imputation_method='mean')
 
 """ Técnicas de label enconder. De nominal -> numericas """
 """ # https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.LabelEncoder.html#sklearn.preprocessing.LabelEncoder
-preprocessing.LabelEncoder()                        # This transformer should be used to encode target values, i.e. y, and not the input X.
-i.e 
-label_encoder.fit_transform(df4[x])    # Simplemente asigna un numero a cada elemento unico en orden de aparación. No tiene en cuenta
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+for variable in cat_cols:
+    df_train_1[variable] = le.fit_transform(df_train_1[variable]) Simplemente asigna un numero a cada elemento unico en orden de aparación. No tiene en cuenta
                                                     #       la frecuencia
+#####
+
 # https://pandas.pydata.org/docs/reference/api/pandas.get_dummies.html
 df_dummies = pd.get_dummies(df_bank[k])             # Devuelve un df con una matriz de dummies. Luego deberá añadirse al df principal
  """
 ##########################################################################################################
 ##########################################################################################################
 
+# Crear el modelo
+model_setup = setup(data=df_train_1, 
+                    target = 'variable_target', 
+                    )
+# comparar modelos
+best_model = compare_models()
+##########################################################################################################
+##########################################################################################################
+
+# Predicción
+def prediccion()
 
 
 
@@ -90,8 +106,6 @@ def winsorize_with_pandas(s, limits):
     return s.clip(lower=s.quantile(limits[0], interpolation='lower'), 
                   upper=s.quantile(1-limits[1], interpolation='higher'))
 
-
-## Función para gestionar outliers
 def gestiona_outliers(col,clas = 'check'):
     
      print(col.name)
@@ -122,35 +136,6 @@ def gestiona_outliers(col,clas = 'check'):
             print('MissingDespues: ' + str(col.isna().sum()) +'\n')
             return(col)
 
-def histogram_boxplot(data, xlabel = None, title = None, font_scale=2, figsize=(9,8), bins = None):
-    """ Boxplot and histogram combined
-    data: 1-d data array
-    xlabel: xlabel 
-    title: title
-    font_scale: the scale of the font (default 2)
-    figsize: size of fig (default (9,8))
-    bins: number of bins (default None / auto)
-
-    example use: histogram_boxplot(np.random.rand(100), bins = 20, title="Fancy plot")
-    """
-    # Definir tamaño letra
-    sns.set(font_scale=font_scale)
-    # Crear ventana para los subgráficos
-    f2, (ax_box2, ax_hist2) = plt.subplots(2, sharex=True, gridspec_kw={"height_ratios": (.15, .85)}, figsize=figsize)
-    # Crear boxplot
-    sns.boxplot(x=data, ax=ax_box2)
-    # Crear histograma
-    sns.histplot(x=data, ax=ax_hist2, bins=bins) if bins else sns.histplot(x=data, ax=ax_hist2)
-    # Pintar una línea con la media
-    ax_hist2.axvline(np.mean(data),color='g',linestyle='-')
-    # Pintar una línea con la mediana
-    ax_hist2.axvline(np.median(data),color='y',linestyle='--')
-    # Asignar título y nombre de eje si tal
-    if xlabel: ax_hist2.set(xlabel=xlabel)
-    if title: ax_box2.set(title=title, xlabel="")
-    # Mostrar gráfico
-    plt.show()
-
 
 # Devuelve 
 # - breve descripción
@@ -161,7 +146,7 @@ def descripcion_categorica(df, col, resultados_mostrados=15):
     """
     Función personal con cierta ayuda de chatGPT
     """
-    if (df[col].dtypes == 'object'):
+    if (df[col].dtypes == 'object' or df[col].dtypes == 'bool'):
         print("--------------", col.upper(), "---------------")
         print(df[col].describe())
         print("NaN:   ", df[col].isna().sum())
@@ -202,7 +187,8 @@ def descripcion_categorica(df, col, resultados_mostrados=15):
         plt.show()
         print("---------------------------------------------")
     else:
-        print("error en descripcion_categoricas")
+        print("la columna no es de tipo objeto")
+        print("la columna es de tipo ", df[col].dtypes)
         return(None)
         
 def descripcion_numerica(df, col):
@@ -236,20 +222,16 @@ def missing_values_summary(df):
     """
     # Calcula el número de valores nulos en cada columna
     valores_nulos_por_columna = df.isnull().sum()
-    
     # Calcula el porcentaje de valores nulos en cada columna
     total_filas = len(df)
     porcentaje_valores_nulos_por_columna = (valores_nulos_por_columna / total_filas) * 100
-    
     # Redondea el porcentaje al decimal más cercano
     porcentaje_valores_nulos_por_columna = porcentaje_valores_nulos_por_columna.round(1)
-    
     # Crea un DataFrame con el resumen de valores nulos
     resumen_valores_nulos = pd.DataFrame({
         'Valores Nulos': valores_nulos_por_columna,
         '% de Valores Nulos': porcentaje_valores_nulos_por_columna
     })
-    
     return resumen_valores_nulos
 
 """ def saca_metricas(y1, y2):
