@@ -7,10 +7,112 @@ from pycaret.classification import *
 from sklearn.impute import KNNImputer
 from sklearn.preprocessing import *
 from feature_engine.imputation import RandomSampleImputer
+import category_encoders as ce
 
 # %%
 # Tengo que crear una función que recoja todas las modificaciónes que hemos hecho hasta ahora para implementarla en el df objetivo
 # Las ejecuto EXACTAMENTE en el orden en el que las hice
+
+""" Transformaciones creadas en el V6.1"""
+def tratamiento2(df_procesar):
+
+    df_procesar['amount_tsh_bool'] = df_procesar['amount_tsh'].apply(lambda x: 1 if x != 0 else 0)
+    # Label Encoding
+    label_encoder = LabelEncoder()
+    df_procesar['funder'] = label_encoder.fit_transform(df_procesar['funder'])
+
+    # Frequency Encoding
+    df_procesar['funder_frequency_encoded'] = df_procesar['funder']
+    frequency_encoder = ce.CountEncoder()
+    df_procesar['funder_frequency_encoded'] = frequency_encoder.fit_transform(df_procesar['funder_frequency_encoded'])
+
+    df_procesar['installer_frequency_encoded'] = df_procesar['installer']
+    # Label Encoding
+    label_encoder = LabelEncoder()
+    df_procesar['installer'] = label_encoder.fit_transform(df_procesar['installer'])
+    # Frequency Encoding
+    frequency_encoder = ce.CountEncoder()
+    df_procesar['installer_frequency_encoded'] = frequency_encoder.fit_transform(df_procesar['installer_frequency_encoded'])
+
+
+    df_procesar['wpt_name_frequency_encoded'] = df_procesar['wpt_name']
+    # Label Encoding
+    label_encoder = LabelEncoder()
+    df_procesar['wpt_name'] = label_encoder.fit_transform(df_procesar['wpt_name'])
+    # Frequency Encoding
+    frequency_encoder = ce.CountEncoder()
+    df_procesar['wpt_name_frequency_encoded'] = frequency_encoder.fit_transform(df_procesar['wpt_name_frequency_encoded'])
+
+    df_procesar['num_private_b'] = df_procesar['num_private'].apply(lambda x: 1 if x != 0 else 0)
+    del df_procesar['num_private']
+
+    label_encoder = LabelEncoder()
+    df_procesar['basin'] = label_encoder.fit_transform(df_procesar['basin'])
+    # subvillage
+
+    df_procesar['region_frequency_encoded'] = df_procesar['region']
+    label_encoder = LabelEncoder()
+    df_procesar['region'] = label_encoder.fit_transform(df_procesar['region'])
+
+    # Frequency Encoding
+    frequency_encoder = ce.CountEncoder()
+    df_procesar['region_frequency_encoded'] = frequency_encoder.fit_transform(df_procesar['region_frequency_encoded'])
+
+    df_procesar['subvillage_frequency_encoded'] = df_procesar['subvillage']
+    # Label Encoding
+    label_encoder = LabelEncoder()
+    df_procesar['subvillage'] = label_encoder.fit_transform(df_procesar['subvillage'])
+    # Frequency Encoding
+    frequency_encoder = ce.CountEncoder()
+    df_procesar['subvillage_frequency_encoded'] = frequency_encoder.fit_transform(df_procesar['subvillage_frequency_encoded'])
+
+    df_procesar['lga_frequency_encoded'] = df_procesar['lga']
+    # Label Encoding
+    label_encoder = LabelEncoder()
+    df_procesar['lga'] = label_encoder.fit_transform(df_procesar['lga'])
+    # Frequency Encoding
+    frequency_encoder = ce.CountEncoder()
+    df_procesar['lga_frequency_encoded'] = frequency_encoder.fit_transform(df_procesar['lga_frequency_encoded'])
+
+    df_procesar['ward_frequency_encoded'] = df_procesar['ward']
+    # Label Encoding
+    label_encoder = LabelEncoder()
+    df_procesar['ward'] = label_encoder.fit_transform(df_procesar['ward'])
+    # Frequency Encoding
+    frequency_encoder = ce.CountEncoder()
+    df_procesar['ward_frequency_encoded'] = frequency_encoder.fit_transform(df_procesar['ward_frequency_encoded'])
+
+    df_procesar['scheme_management'].replace({'Company': 'Other', 'SWC': 'Other', 'Trust': 'Other'}, inplace=True)
+    
+    one_hot_scheme_management = pd.get_dummies(df_procesar['scheme_management'], prefix='management')
+    # Concatenar el DataFrame original con el DataFrame resultante del One-Hot Encoding
+    df_procesar = pd.concat([df_procesar, one_hot_scheme_management], axis=1)
+    # Eliminar la columna original 'scheme_management' si deseas conservar solo las columnas codificadas en caliente
+    df_procesar.drop('scheme_management', axis=1, inplace=True)
+
+    columnas_a_visualizar = ['extraction_type_class', 'management_group', 'payment_type', 'quality_group', 'quantity',
+                         'source_type', 'source_class', 'waterpoint_type']
+    try:
+        df_procesar['status_group'].replace(['non functional', 'functional needs repair', 'functional'], [0, 1, 2], inplace=True)
+        print("Este df tiene status_group")
+    except:
+        print("Este df no tiene status_group")
+
+    df_procesar['waterpoint_type'].replace({'cattle trough': 'other', 'dam': 'other'}, inplace=True)
+
+    df_dummy = pd.DataFrame()
+    for columna in columnas_a_visualizar:
+        dummy_columna = pd.get_dummies(df_procesar[columna], prefix=columna, prefix_sep='_')
+        df_procesar = pd.concat([df_procesar, dummy_columna], axis=1)
+        df_procesar.drop(columna, axis=1, inplace=True)
+    columnas_booleanas = ['public_meeting', 'permit', 'management_Other', 'management_Parastatal', 'management_Private operator', 'management_VWC', 'management_WUA', 'management_WUG', 'management_Water Board', 'management_Water authority']
+    df_procesar[columnas_booleanas] = df_procesar[columnas_booleanas].astype(bool)
+
+    df_procesar['random1'] = np.random.randint(1, 1001, size=len(df_procesar))
+    df_procesar['random2'] = np.random.randint(1, 1001, size=len(df_procesar))
+
+    return(df_procesar)
+
 
 def tratamiento(df):
     # V3
@@ -35,7 +137,10 @@ def tratamiento(df):
     del df2             # para que no ocupe memoria
 
     # V3.1
-    del df3['recorded_by']
+    try:
+        del df3['recorded_by']
+    except:
+        None
     del df3['extraction_type']
     del df3['extraction_type_group']
     del df3['scheme_name']

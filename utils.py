@@ -58,18 +58,13 @@ df_dummies = pd.get_dummies(df_bank[k])             # Devuelve un df con una mat
 ##########################################################################################################
 
 # Crear el modelo
-model_setup = setup(data=df_train_1, 
+""" model_setup = setup(data=df_train_1, 
                     target = 'variable_target', 
                     )
 # comparar modelos
-best_model = compare_models()
+best_model = compare_models() """
 ##########################################################################################################
 ##########################################################################################################
-
-# Predicción
-def prediccion()
-
-
 
 
 def numeric_to_categoric(df, col, bins=10): # no testada
@@ -266,3 +261,30 @@ def zero_searcher(df):
             columnas_con_ceros.append(columna)
     return columnas_con_ceros
 
+""" Previsualización de variables numericas y categoricas en graficos
+NUMERICAS:
+cat_cols= df_procesar.select_dtypes(include=['object','category']).columns
+num_cols = df_procesar.select_dtypes(exclude=['object','category']).columns
+
+fig, axs = plt.subplots(ncols=5, nrows=3, figsize=(20, 10))
+axs = axs.flatten() # 
+
+index = 0
+for k,v in df_procesar[num_cols].items(): 
+    sns.distplot(v, bins=20, ax=axs[index])
+    index += 1
+
+plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=5.0)
+
+CATEGORICAS
+
+fig, axs = plt.subplots(ncols=5, nrows=3, figsize=(20, 10))
+axs = axs.flatten() # 
+
+index = 0
+for k,v in data[cat_cols].items(): 
+    sns.countplot(v, ax=axs[index])
+    index += 1
+
+plt.tight_layout(pad=0.4, w_pad=0.5, h_pad=5.0)
+"""
