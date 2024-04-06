@@ -1,10 +1,10 @@
-## Machine_learning
+# Machine_learning
 
 Este es el proyecto entregado del módulo de Machine Learning del Master en Big Data por la Universidad Complutense de Madrid. 
 Consiste en predecir el fallo de una bbdd real sobre fallos en bombas de agua en Tanzania. Es una competición de Kaggle
 Puedes ver el enunciado en enunciado.pdf
 
-# ¿Cómo he estructurado este proyecto en cuanto a carpetas?
+## ¿Cómo he estructurado este proyecto en cuanto a carpetas?
 
 - Primero los archivos que empiezan con V* indican el orden en el que he ido ejecutando los Notebooks
 - Estos Notebooks se apoyan en la librería utils.py. Esta librería comprende funciones del módulo de Minería de Datos,
@@ -17,7 +17,7 @@ Puedes ver el enunciado en enunciado.pdf
 - La carpeta 'versiones_preliminares' contiene archivos Júpiter preliminares. Carecen de importancia para el proyecto final.
 - Recomiendo leer del V0 al V9.0. 
 
-# ¿Qué orden he seguido?
+## ¿Qué orden he seguido?
 
 - Antes de nada, hago una prueba imputando todo con un label_encoder básico a todas las variables. Es muy sorprendente que 
     esta forma tan básica obtenga un rate de 0.8020 cuando el record está en 0.8294. No hay mucha diferencia.
@@ -37,7 +37,7 @@ Puedes ver el enunciado en enunciado.pdf
 - En el V8 intento seguir los videos de clase pero nuestra variable objetivo no es booleana así que lo hago solo parcialmente
     También obtengo un grafico qué mide la importancia de las variables mediante Fscore. 
 
-# ¿Qué conclusiones/aprendizajes he obtenido?
+# #¿Qué conclusiones/aprendizajes he obtenido?
 
 - Para realizar este proyecto he utilizado la extensión de Jupiter Notebook con VScode. Ha sido un gran error. Lo hice porque
     estoy muy familiarizado con las ayudas de autocompletado y ayudas visuales por colores a variables y metodos. Además,
@@ -58,7 +58,7 @@ Puedes ver el enunciado en enunciado.pdf
     más que en el minado de los datos. Pensaba que era opuesto pero me he dado cuenta que los algoritmos más modernos por fuerza 
     bruta dan buenos rendimientos. Es más útil invertir en modificar hiperparámetros que en eliminar-crear columnas nuevas.
 
-Estoy razonablemente contento con el resultado para ser una primera aproximación al machine learning.
+Estoy razonablemente contento para ser una primera aproximación al machine learning.
 
 
 Autor: JGM
