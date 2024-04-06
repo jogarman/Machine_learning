@@ -1,4 +1,4 @@
-# Machine_learning
+# Machine Learning
 
 Este es el proyecto entregado del módulo de Machine Learning del Master en Big Data por la Universidad Complutense de Madrid. 
 Consiste en predecir el fallo de una bbdd real sobre fallos en bombas de agua en Tanzania. Es una competición de Kaggle
