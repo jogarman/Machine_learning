@@ -1,5 +1,9 @@
 ## Machine_learning
 
+Este es el proyecto entregado del módulo de Machine Learning del Master en Big Data por la Universidad Complutense de Madrid. 
+Consiste en predecir el fallo de una bbdd real sobre fallos en bombas de agua en Tanzania. Es una competición de Kaggle
+Puedes ver el enunciado en enunciado.pdf
+
 # ¿Cómo he estructurado este proyecto en cuanto a carpetas?
 
 - Primero los archivos que empiezan con V* indican el orden en el que he ido ejecutando los Notebooks
@@ -13,7 +17,7 @@
 - La carpeta 'versiones_preliminares' contiene archivos Júpiter preliminares. Carecen de importancia para el proyecto final.
 - Recomiendo leer del V0 al V9.0. 
 
-# ¿Qué orden he seguido? (a grandes rasgos)
+# ¿Qué orden he seguido?
 
 - Antes de nada, hago una prueba imputando todo con un label_encoder básico a todas las variables. Es muy sorprendente que 
     esta forma tan básica obtenga un rate de 0.8020 cuando el record está en 0.8294. No hay mucha diferencia.
