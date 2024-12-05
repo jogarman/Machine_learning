@@ -37,7 +37,7 @@ Puedes ver el enunciado en enunciado.pdf
 - En el V8 intento seguir los videos de clase pero nuestra variable objetivo no es booleana así que lo hago solo parcialmente
     También obtengo un grafico qué mide la importancia de las variables mediante Fscore. 
 
-#Conclusiones y aprendizajes
+# Conclusiones y aprendizajes
 
 - Para realizar este proyecto he utilizado la extensión de Jupiter Notebook con VScode. Ha sido un gran error. Lo hice porque
     estoy muy familiarizado con las ayudas de autocompletado y ayudas visuales por colores a variables y metodos. Además,
